@@ -42,10 +42,6 @@ class Database(object):
         return Database.database[collection].update_one(search,query)
 
     @staticmethod
-    def count(collection, query):
-        return Database.database[collection].count_documents(query)
-
-    @staticmethod
     def close():
         Database.client.close()
 
