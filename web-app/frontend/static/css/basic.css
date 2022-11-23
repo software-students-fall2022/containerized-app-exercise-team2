@@ -1,0 +1,167 @@
+@font-face{
+	font-family:cyberPunk;
+	src:url(CyberwarRegular-7BX0E.ttf);
+}
+
+@font-face{
+	font-family:alien;
+	src:url(AlienWorld-owj0x.ttf);
+}
+
+@font-face{
+	font-family:cute;
+	src:url(CHERI___.TTF);
+}
+
+body{
+	background-color: gray;
+	/*background-image:url(https://images.squarespace-cdn.com/content/v1/59d43de0b7411c759f0276c2/1655166474581-5ZB80H6SEATQSBZKVSW0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220613202742.jpg?format=1500w);*/
+	background-repeat: no-repeat;
+	background-size: 130%,130%;
+}
+h1{
+	font-family:cute;
+	font-size:60pt;
+	color: white;
+}
+
+h2 {
+	font-family: cute;
+	font-size: 45pt;
+	color: white;
+}
+
+p{
+	color: white;
+	font-family:alien;
+	font-size:20pt;
+}
+a:link{color: rgba(0,0,0,.6);text-decoration: none;font-family:cute;font-size:20pt;}
+a:visited{color: rgba(0,0,0,.6);text-decoration: none;font-family:cute;}
+a:hover{color: rgba(0,0,0,1);text-decoration: none;font-family:cute;}
+
+table, th, td {
+	text-align:center;
+	margin: 5% auto;
+	background-color:rgba(150,150,100,.5);
+	border: 1px solid aqua;
+	padding:15px; 
+	
+}
+
+table{
+	width:100%;
+	
+}
+
+ul{
+	list-style: none;
+}
+li {
+  list-style: none;
+  background: rgba(200,200,150,0.7);
+  color: darkblue;
+  margin: 10px auto;
+  border: 5px solid;
+  border-color: rgba(200,200,150,0.7);
+}
+
+div{
+	text-align:center;
+	margin:5px auto;
+}
+
+img{
+	width:100%px;
+	height:100%px;
+	outline-style: outset; 
+	padding:1px;
+}
+.General {
+	display: flex;
+	clear: both;
+	justify-content: center;
+	background-color: rgba(25, 167, 136, 0.568);
+}
+
+.Article {
+	text-align: center;
+	background-color: rgba(150,150,100,.5);
+	border: 1px solid rgba(50, 63, 185, 0.589);
+	padding: 5px;
+	width: 90vw;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+.BoxHolder {
+	text-align: center;
+	margin: 5% auto;
+	background-color: rgba(150,150,100,.5);
+	border: 1px solid aqua;
+	padding: 5px;
+	width: 90vw;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.BoxLine {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	height:20vw;
+}
+
+.Box {
+	background: rgba(200,200,150,0.3);
+	color: darkblue;
+	margin: 10px auto;
+	border: 5px solid;
+	border-color: rgba(250,200,150,0.7);
+	display: flex;
+	height: auto;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.BoxImage {
+	width: 13vw;
+	height: auto;
+	margin: 2px 2px 2px 2px;
+}
+
+.BoxText {
+	width: 13vw;
+	margin: 2px 2px 2px 2px;
+}
+
+.BoxTextP {
+	margin:5%;
+	font-size:15px;
+}
+.SideBar {
+	display: flex;
+	width: 20vw;
+	height: 50vh;
+	border: 2px solid;
+	border-color: rgba(145, 87, 173, 0.7);
+	justify-content: center;
+	align-content:space-around;
+	flex-direction: column;
+}
+
+.SideText {
+	font-size: 15pt;
+	list-style: none;
+	background: rgb(105, 6, 105,0.5);
+	color: darkgray;
+	margin: 10px auto;
+	border: 5px solid;
+	border-color: rgba(145, 87, 173, 0.7);
+
+}
+
