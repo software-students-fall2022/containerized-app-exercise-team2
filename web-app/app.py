@@ -21,11 +21,6 @@ app.secret_key = urandom(32)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-
-config = dotenv_values(".env")
-
-# connect to the database
-cxn = pymongo.MongoClient(config['MONGO_URI'], serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
 try:
     # verify the connection works by pinging the database
     cxn.admin.command('ping') # The ping command is cheap and does not require auth.
@@ -62,7 +57,7 @@ def locate_user(user_id=None, username=None):
     else:
         # loop up by username
         criteria = {"username": username}
-    doc = db.users.find_one(criteria) # find a user with the given criteria
+    doc = Database.find_single(['user', criteria) # find a user with the given criteria
 
     # if user exists in the database, create a User object and return it
     if doc:
@@ -144,7 +139,7 @@ def register():
             flash('Password does not match.')
         else:
             hashed_password = generate_password_hash(p)
-            db.users.insert_one({"username": u, 'firstName': firstName, 'lastName': lastName,  "password": hashed_password})
+            Database.insert_one('user', {"username": u, 'firstName': firstName, 'lastName': lastName,  "password": hashed_password})
             return redirect(url_for('login'))
     else:
         if flask_login.current_user.is_authenticated:
@@ -153,18 +148,18 @@ def register():
     return render_template("register.html")
 
 
-@app.route('/homepage')
+@app.route('/home')
 @flask_login.login_required
 def homepage():
     """
-    Route for the homepage page
+    Route for the home page
     """
 
     # find the todos array using the logged in user's ObjectId
     #todos = flask_login.current_user.data['todos']
 
     # pass in today todos and the user's username to the homepage template
-    return render_template("homepage.html", todos = todayTodos, homepage=True)
+    return render_template("home.html")
 
 if __name__=='__main__':
     app.run(debug=True)
