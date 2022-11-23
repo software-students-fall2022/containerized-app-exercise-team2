@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, abort, url_for, make_response, flash
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response, flash, session
+import os
 from os import urandom
 from bson.json_util import dumps
 from bson.objectid import ObjectId
@@ -12,9 +13,14 @@ from mongodb import Database
 import flask_login
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 Database.initialize()
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = urandom(32)
 
 # set up flask-login for user authentication
@@ -146,13 +152,25 @@ def register():
             return redirect(url_for('homepage'))
     return render_template("register.html")
 
-
 @app.route('/home')
 @flask_login.login_required
 def home():
+    return render_template("home.html")
+
+@app.route('/home', methods=["POST"])
+@flask_login.login_required
+def uploadFile():
     """
     Route for the home page
     """
+    # Upload file flask
+    uploaded_img = request.files['uploaded-file']
+    # Extracting uploaded data file name
+    img_filename = secure_filename(uploaded_img.filename)
+    # Upload file to database (defined uploaded folder in static path)
+    uploaded_img.save(os.path.join(app.config['UPLOAD_FOLDER'], img_filename))
+    # Storing uploaded file path in flask session
+    session['uploaded_img_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
 
     # find user data like array of tasks
     #flask_login.current_user.data['todos']
