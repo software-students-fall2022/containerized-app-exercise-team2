@@ -13,7 +13,7 @@ import flask_login
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 
-Database.initialize
+Database.initialize()
 app = Flask(__name__)
 app.secret_key = urandom(32)
 
@@ -21,16 +21,16 @@ app.secret_key = urandom(32)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-try:
-    # verify the connection works by pinging the database
-    cxn.admin.command('ping') # The ping command is cheap and does not require auth.
-    db = cxn[config['MONGO_DBNAME']] # store a reference to the database
-    print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
-except Exception as e:
-    # the ping command failed, so the connection is not available.
-    # render_template('error.html', error=e) # render the edit template
-    print(' *', "Failed to connect to MongoDB at", config['MONGO_URI'])
-    print('Database connection error:', e) # debug
+# try:
+#     # verify the connection works by pinging the database
+#     # cxn.admin.command('ping') # The ping command is cheap and does not require auth.
+#     #db = cxn[config['MONGO_DBNAME']] # store a reference to the database
+#     #print(' *', 'Connected to MongoDB!') # if we get here, the connection worked!
+# except Exception as e:
+#     # the ping command failed, so the connection is not available.
+#     # render_template('error.html', error=e) # render the edit template
+#     print(' *', "Failed to connect to MongoDB at", config['MONGO_URI'])
+#     print('Database connection error:', e) # debug
 
 
 # a class to represent a user
@@ -57,7 +57,7 @@ def locate_user(user_id=None, username=None):
     else:
         # loop up by username
         criteria = {"username": username}
-    doc = Database.find_single(['user', criteria) # find a user with the given criteria
+    doc = Database.find_single('user', criteria) # find a user with the given criteria
 
     # if user exists in the database, create a User object and return it
     if doc:
@@ -131,15 +131,14 @@ def register():
         lastName = request.form['lastName']
         p = request.form['password']
 
-        if not u or not p or not m:
+        if not u or not p or not firstName or not lastName:
             flash('Please fill all fields.')
         elif locate_user(username=u):
             flash('An account was already created with this username.')
-        elif p != m:
-            flash('Password does not match.')
         else:
             hashed_password = generate_password_hash(p)
             Database.insert_one('user', {"username": u, 'firstName': firstName, 'lastName': lastName,  "password": hashed_password})
+            flash('Success!')
             return redirect(url_for('login'))
     else:
         if flask_login.current_user.is_authenticated:
@@ -150,16 +149,25 @@ def register():
 
 @app.route('/home')
 @flask_login.login_required
-def homepage():
+def home():
     """
     Route for the home page
     """
 
-    # find the todos array using the logged in user's ObjectId
-    #todos = flask_login.current_user.data['todos']
+    # find user data like array of tasks
+    #flask_login.current_user.data['todos']
 
     # pass in today todos and the user's username to the homepage template
     return render_template("home.html")
+
+@app.route('/logout')
+@flask_login.login_required
+def logout():
+    """
+    Route to logout
+    """
+    flask_login.logout_user()
+    return(redirect(url_for("login")))
 
 if __name__=='__main__':
     app.run(debug=True)
