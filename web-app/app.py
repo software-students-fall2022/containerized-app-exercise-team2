@@ -1,17 +1,19 @@
 from flask import Flask, render_template, request, redirect, abort, url_for, make_response, flash
 from os import urandom
+from bson.json_util import dumps
 from bson.objectid import ObjectId
-import pymongo
 import sys
 import datetime
 from dotenv import dotenv_values
 import certifi
 import re
+from mongodb import Database
 
 import flask_login
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 
+Database.initialize
 app = Flask(__name__)
 app.secret_key = urandom(32)
 
@@ -99,7 +101,7 @@ def login():
     # if the current user is already signed in, there is no need to sign up, so redirect them
     if flask_login.current_user.is_authenticated:
         flash('You are already logged in, silly!') # flash can be used to pass a special message to the template we are about to render
-        return redirect(url_for('homepage')) # tell the web browser to make a request for the / route (the home function)
+        return redirect(url_for('home')) # tell the web browser to make a request for the / route (the home function)
     if (request.args):
         if bool(request.args["username"]) and bool(request.args["password"]):
             usernameInput = request.args["username"]
@@ -108,7 +110,7 @@ def login():
             if user:
                     if check_password_hash(user.data['password'], passwordInput):
                         flask_login.login_user(user)
-                        return(redirect(url_for("homepage")))
+                        return(redirect(url_for("home")))
                     else:
                         flash('Invalid password.')
                         return(redirect(url_for("login")))
@@ -130,8 +132,9 @@ def register():
         return render_template("register.html")
     if request.method == 'POST':
         u = request.form['username']
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
         p = request.form['password']
-        m = request.form['match']
 
         if not u or not p or not m:
             flash('Please fill all fields.')
@@ -141,7 +144,7 @@ def register():
             flash('Password does not match.')
         else:
             hashed_password = generate_password_hash(p)
-            db.users.insert_one({"username": u, "password": hashed_password, "todos": []})
+            db.users.insert_one({"username": u, 'firstName': firstName, 'lastName': lastName,  "password": hashed_password})
             return redirect(url_for('login'))
     else:
         if flask_login.current_user.is_authenticated:
@@ -162,3 +165,6 @@ def homepage():
 
     # pass in today todos and the user's username to the homepage template
     return render_template("homepage.html", todos = todayTodos, homepage=True)
+
+if __name__=='__main__':
+    app.run(debug=True)
