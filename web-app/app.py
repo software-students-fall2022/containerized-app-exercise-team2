@@ -8,6 +8,7 @@ import datetime
 from dotenv import dotenv_values
 import certifi
 import re
+from PIL import Image
 from mongodb import Database
 
 import flask_login
@@ -171,6 +172,10 @@ def uploadFile():
     uploaded_img.save(os.path.join(app.config['UPLOAD_FOLDER'], img_filename))
     # Storing uploaded file path in flask session
     session['uploaded_img_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
+
+    img = Image.open(session['uploaded_img_file_path']).convert('L')
+    img.save('static/uploads/greyscale.png')
+
 
     # find user data like array of tasks
     #flask_login.current_user.data['todos']
