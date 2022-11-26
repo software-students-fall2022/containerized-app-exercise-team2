@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import mongomock
 from bson.json_util import dumps, loads
 import certifi
 import sys
@@ -20,6 +21,10 @@ class Database(object):
         except Exception as e:
             print(' *', "Failed to connect to MongoDB at", file=sys.stderr)
             print('Database connection error: ' + e, file=sys.stderr)
+
+    @staticmethod
+    def initialize_mock():
+        Database.database = mongomock.MongoClient().db
 
     @staticmethod
     def insert_one(collection, data):
