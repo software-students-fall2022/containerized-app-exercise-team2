@@ -1,6 +1,5 @@
 import pytest
 from app import app, Database
-from mongodb import Database
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='session')
