@@ -17,11 +17,16 @@ class model:
         if not pic:
             pic = self.take_picture()
         cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
-        pic.transforms.Resize(256)
-        pic.transforms.CenterCrop(224)
-        pic.transforms.ToTensor()
-        pic.transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        return model(pic)
+        pil_pic = Image.fromarray(pic)
+
+        data_transforms = transforms.Compose([
+            transforms.Resize(256),
+            pic.transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
+        image = data_transforms(pil_pic)
+        return model(image)
     
     def take_picture():
         return VideoCapture(0).read()
