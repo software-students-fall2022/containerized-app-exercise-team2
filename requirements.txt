@@ -23,6 +23,7 @@ MarkupSafe==2.1.1
 more-itertools==9.0.0
 packaging==21.3
 pep517==0.13.0
+Pillow==9.3.0
 pipenv==2022.11.5
 pkginfo==1.8.3
 platformdirs==2.5.3
@@ -31,6 +32,7 @@ Pygments==2.13.0
 pymongo==4.3.2
 pyparsing==3.0.9
 pytest==7.2.0
+pytest-flask==1.2.0
 python-dotenv==0.21.0
 pywin32-ctypes==0.2.0
 readme-renderer==37.3
