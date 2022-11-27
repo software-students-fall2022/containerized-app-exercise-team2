@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Edit Page</title>
+		<link rel="stylesheet" href="static/css/basic.css">
+		<style>
+		h1 {
+		padding: 30px;
+		text-align: center;
+		background: #2bb27c;
+		color: white;
+		font-size: 30px;
+		}
+		.input {
+			background-color: #419979;
+  			color: white;
+		}
+		button {
+        background-color: #148617;
+        color: #fff;
+        padding: 4px 16px;
+        cursor: pointer;
+		border-radius: 20%;
+      }
+		#moods {
+		border-collapse: collapse;
+		width: 100%;
+		}
+		#moods td, #customers th {
+		border: 2px solid #ddd;
+		padding: 9px;
+		}
+		#moods th {
+		padding-top: 11px;
+		padding-bottom: 11px;
+		text-align: center;
+		background-color: #055f3e;
+		color: white;
+}
+		</style>
+
+		
+	</head>
+
+	<body>
+		<h1>History</h1>
+		<a href="/home">Return Home</a><br><br>
+
+		<form action="/history" method="get">
+			<label>
+			  Start Date:
+			  <input type="date" name="start_date" />
+			</label>
+			<label>
+				End Date:
+				<input type="date" name="end_date" />
+			</label>
+			<button>Search</button>
+		</form>
+		<br><br>
+		{% if data != none %}
+		<table id="moods">
+		<tr>
+			<th>date</th>
+			<th>mood</th>
+		</tr>
+		{% for i in data %}
+		<tr>
+			<td>{{i.time}}</td>
+			<td>{{i.mood}}</td>		
+		</tr>
+		{% endfor %}
+		
+		
+		</table>
+		{% endif %}
+
+	</body>
+</html>
