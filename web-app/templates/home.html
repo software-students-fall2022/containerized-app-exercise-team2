@@ -1,18 +1,65 @@
-<!DOCTYPE html>
 <html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-        This is the home page.
-        <form action="{{url_for('logout')}}">
-            <input type="submit" value="Log Out" />
-        </form>
+	<head>
+		<title>CWJ's Interest</title>
+		<link rel="stylesheet" href="static/css/basic.css">
+		<!-- Media parts copied from course web site  -->
 
-        <form method="POST" enctype="multipart/form-data" action="/home">
-            <input type="file" id="myFile" name="uploaded-file" accept="png, jpg, jpeg">
-            <input type="submit" value="Submit">
-        </form>
+		<!-- Media query for narrow browser width -->
+		<link rel="stylesheet" media="only screen and (max-width: 480px)" href="static/css/basic.css">
 
-    </body>
+		<!-- Media query for medium browser width -->
+		<link rel="stylesheet" media="only screen and (min-width: 481px) and (max-width: 960px)" href="static/css/basic.css">
+
+		<!-- Media query for full browser width -->
+		<link rel="stylesheet" media="only screen and (min-width: 961px)" href="static/css/basic.css">
+
+		<!-- Prevent smartphones from scaling pages down -->
+		<meta name="viewport" content="initial-scale=1">
+
+		<style type="text/css">
+			li {
+				background: rgba(200,150,200,0.7);
+				color: darkblue;
+				margin: 10px auto;
+				border: 5px solid;
+				border-color: rgba(200,150,200,0.7);
+				font-size: 10pt;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>&nbsp&nbsp&nbsp Welcome</h1>
+		<h2 style="float:right">To the route of your mood &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
+		
+		<div class="General">
+			<div class="Article">
+				<form method="POST" enctype="multipart/form-data" action="/home">
+					<input type="file" id="myFile" name="uploaded-file" accept="png, jpg, jpeg">
+					<input type="submit" value="Submit">
+				</form>
+
+			</div>
+			<div class="Article">
+				<h3>The Current Mood is: {{mood}}</h3>
+				<img src={{img}}>
+			</div>
+
+			<div class="SideBar" style="background-color: rgba(200,100,200,.3);">
+				
+				<h3>Hello {{userId}}</h3>
+				
+				<div class="SideText" > <form action="{{url_for('logout')}}"><button type="submit" id="logoutButton" name="logout" value="Log Out" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">logout</button></form></div>
+			
+
+
+			</div>
+		</div>
+
+
+		
+
+
+	</body>
+
 </html>

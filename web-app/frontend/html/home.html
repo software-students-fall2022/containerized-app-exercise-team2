@@ -34,17 +34,22 @@
 		
 		<div class="General">
 			<div class="Article">
-				<h3>This is a site about xxxxooooaaaaaM</h3>
+				<form method="POST" enctype="multipart/form-data" action="/home">
+					<input type="file" id="myFile" name="uploaded-file" accept="png, jpg, jpeg">
+					<input type="submit" value="Submit">
+				</form>
+
 			</div>
+			<div class="Article">
+				<h3>The Current Mood is: {{mood}}</h3>
+				<img src={{img}}>
+			</div>
+
 			<div class="SideBar" style="background-color: rgba(200,100,200,.3);">
-				<h3>Login</h3>
-				<form action="/login" method="post">
-					<input class="SideText" type="text" id="userName" name="userName" placeholder="User name" ><br>
-					<input class="SideText"  type="text" id="password" name="password" placeholder="Password" ><br>
-					<button type="submit" id="loginButton" name="login" value="" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">Login</button>
-				</form> 
 				
-				<div class="SideText" > <form action="/register">First time user please<button type="submit" id="registerButton" name="register" value="" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">register</button></form></div>
+				<h3>Hello {{userId}}</h3>
+				
+				<div class="SideText" > <form action="{{url_for('logout')}}"><button type="submit" id="logoutButton" name="logout" value="Log Out" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">logout</button></form></div>
 			
 
 

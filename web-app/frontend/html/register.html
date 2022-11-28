@@ -33,17 +33,37 @@
 		<h2 style="float:right">To the route of your mood &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
 		
 		<div class="General">
-			<div class="Article">
-				<h3>This is a site about xxxxooooaaaaaM</h3>
-			</div>
+
 			
 			<div class="SideBar" style="background-color: rgba(200,100,200,.3);">
 				
-				<h3>Hello, User2099</h3>
-				
-				<div class="SideText" > <form action="/logout"><button type="submit" id="logoutButton" name="logout" value="" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">logout</button></form></div>
-			
-
+				<form class="authentication-container" action="/register" method="POST">
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<ul class=flashes>
+							{% for message in messages %}
+								<center><div class="message">{{ message }}</div></center>
+							{% endfor %}
+							</ul>
+						{% endif %}
+					{% endwith %}
+					<label for="username">First Name</label><br>
+					<input class="SideText" type="text" name="firstName" required><br>
+					<label for="username">Last Name</label><br>
+					<input class="SideText" type="text" name="lastName" required><br>
+					<label for="username">Username</label><br>
+					<input class="SideText" type="text" name="username" required><br>
+					<label for="password">Password</label><br>
+					<input class="SideText" type="password" name="password" required><br>
+					<center>
+						<input class="submit-button" type="submit" value="Register">
+					</center>
+				</form>
+				<form class="authentication-container" action="/" method="GET">
+					<center>
+						<input class="submit-button" type="submit" value="Cancel">
+					</center>
+				</form>
 
 			</div>
 		</div>

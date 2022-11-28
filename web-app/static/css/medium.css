@@ -1,0 +1,176 @@
+@font-face {
+	font-family: cyberPunk;
+	src: url(CyberwarRegular-7BX0E.ttf);
+}
+
+@font-face {
+	font-family: alien;
+	src: url(AlienWorld-owj0x.ttf);
+}
+
+body {
+	background-color: gray;
+	background-image: url(https://images.squarespace-cdn.com/content/v1/59d43de0b7411c759f0276c2/1655166474581-5ZB80H6SEATQSBZKVSW0/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220613202742.jpg?format=1500w);
+	background-repeat: repeat;
+	background-size: auto;
+}
+
+h1 {
+	font-family: cyberPunk;
+	font-size: 30pt;
+	color: white;
+}
+
+h2 {
+	font-family: cyberPunk;
+	font-size: 25pt;
+	color: white;
+}
+
+p {
+	color: white;
+	font-family: alien;
+	font-size: 15pt;
+}
+
+a:link {
+	color: rgba(0,0,0,.6);
+	text-decoration: none;
+	font-family: alien;
+	font-size: 15pt;
+}
+
+a:visited {
+	color: rgba(0,0,0,.6);
+	text-decoration: none;
+	font-family: alien;
+}
+
+a:hover {
+	color: rgba(0,0,0,1);
+	text-decoration: none;
+	font-family: alien;
+}
+
+table, th, td {
+	text-align: center;
+	margin: 5% auto;
+	background-color: rgba(150,150,100,.5);
+	border: 1px solid aqua;
+	padding: 15px;
+}
+
+table {
+	width: 100%;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	list-style: none;
+	background: rgba(200,200,150,0.7);
+	color: darkblue;
+	margin: 10px auto;
+	border: 5px solid;
+	border-color: rgba(200,200,150,0.7);
+}
+
+div {
+	text-align: center;
+	margin: 10px auto;
+}
+
+img {
+	width: 100%px;
+	height: 100%px;
+	outline-style: outset;
+	padding: 1px;
+}
+
+.General {
+	display: flex;
+	clear: both;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	flex-direction: column-reverse;
+}
+.Article {
+	text-align: center;
+	margin: 5% auto;
+	background-color: rgba(150,150,100,.5);
+	border: 1px solid aqua;
+	padding: 5px;
+	width: 90vw;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+.BoxHolder {
+	text-align: center;
+	margin: 2% auto;
+	background-color: rgba(150,150,100,.5);
+	border: 1px solid aqua;
+	padding: 5px;
+	width: 90vw;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.BoxLine {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.Box {
+	background: rgba(200,200,150,0.3);
+	color: darkblue;
+	margin: 10px auto;
+	border: 5px solid;
+	border-color: rgba(250,200,150,0.7);
+	display: flex;
+	height: auto;
+	width: 100vh;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.BoxImage {
+	position: relative;
+	left: 2%;
+	top: 2%;
+	width: 70vw;
+	height: auto;
+	margin: 2px 2px 2px 2px;
+}
+
+.BoxText {
+	position: relative;
+	right: 2%;
+	top: 2%;
+	width: 50%;
+	margin: 2px 2px 2px 2px;
+	align-self: center;
+}
+
+.BoxTextP {
+	margin: 5%;
+	font-size: 15px;
+}
+
+.SideBar {
+	margin: 5% auto;
+	border: 1px solid aqua;
+	width: 90vw;
+	height: auto;
+}
+
+.SideText {
+	font-size: 15pt;
+}
