@@ -7,6 +7,9 @@ from PIL import Image
 #Class for the machine learning model
 class Model:
     #Creates the model and loads in the weights for the emotion recognition model I trained
+
+    emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
+
     def __init__(self):
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
@@ -34,11 +37,15 @@ class Model:
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ])
 
         image = data_transforms(pil_pic)
-        outputs = self.model(image.unsqueeze(0))
+        im_rep = image.repeat(3,1,1)
+        normalize = transforms.Compose([
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
+        im_rep = normalize(im_rep)
+        outputs = self.model(im_rep.unsqueeze(0))
         _, preds = torch.max(outputs, 1)
         return preds
 
