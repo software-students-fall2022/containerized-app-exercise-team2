@@ -8,14 +8,13 @@ from PIL import Image
 class Model:
     #Creates the model and loads in the weights for the emotion recognition model I trained
 
-    emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
-
     def __init__(self):
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
         self.model.load_state_dict(torch.load("machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
         self.model.eval()
+        self.emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
     #Takes a picture then transforms it for the model
     #The model then processes it and returns 
@@ -47,7 +46,7 @@ class Model:
         im_rep = normalize(im_rep)
         outputs = self.model(im_rep.unsqueeze(0))
         _, preds = torch.max(outputs, 1)
-        return preds
+        return self.emotions[int(preds)]
 
 temp = Model()
 pic = temp.read_picture()
