@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        This is the home page.
+        <form action="{{url_for('logout')}}">
+            <input type="submit" value="Log Out" />
+        </form>
+
+        <form method="POST" enctype="multipart/form-data" action="/home">
+            <input type="file" id="myFile" name="uploaded-file" accept="png, jpg, jpeg">
+            <input type="submit" value="Submit">
+        </form>
+
+    </body>
+</html>
