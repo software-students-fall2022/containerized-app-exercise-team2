@@ -31,9 +31,9 @@
 	<body>
 		<h1>&nbsp&nbsp&nbsp Welcome</h1>
 		<h2 style="float:right">To the route of your mood &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
-		
 		<div class="General">
 			<div class="Article">
+				<h3>Upload a picture of your facial expression!</h3>
 				<form method="POST" enctype="multipart/form-data" action="/home">
 					<input type="file" id="myFile" name="uploaded-file" accept="png, jpg, jpeg">
 					<input type="submit" value="Submit">
@@ -48,7 +48,7 @@
 			<div class="SideBar" style="background-color: rgba(200,100,200,.3);">
 				
 				<h3>Hello {{userId}}</h3>
-				
+				<div class="SideText" > <form action="{{url_for('view_history')}}"><button type="submit" id="logoutButton" name="logout" value="View History" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">View History</button></form></div>
 				<div class="SideText" > <form action="{{url_for('logout')}}"><button type="submit" id="logoutButton" name="logout" value="Log Out" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">logout</button></form></div>
 			
 
