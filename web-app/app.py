@@ -63,10 +63,15 @@ def getRandomJoke():
     joke = pyjokes.get_joke(language="en", category="neutral")
     return joke;
 
-print(getRandomJoke(), file=sys.stderr)
-
 def getRandomAdvice():
-    return;
+    req = Request(
+        url='https://api.adviceslip.com/advice',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    return data["slip"]["advice"];
 
 # set up flask-login for user authentication
 login_manager = flask_login.LoginManager()
