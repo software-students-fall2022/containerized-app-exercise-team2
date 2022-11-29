@@ -16,6 +16,12 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
+import random
+import json
+from urllib.request import Request, urlopen
+import urllib.parse
+import pyjokes
+
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -23,6 +29,44 @@ Database.initialize()
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = urandom(32)
+
+# gets resource from api
+def getRandomPoem():
+    # get random poem title
+    req = Request(
+        url='http://poetrydb.org/title',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    # get poem from url with title
+    req = Request(
+        url="http://poetrydb.org/title/" + urllib.parse.quote((data['titles'][random.randint(0,2971)]), safe='-\"\\,.:;[]/!’()É_`?*=\''),
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    title = data[0]['title']
+    author = data[0]['author']
+    lines = data[0]['lines']
+    poem = "\n"
+    for i in range(0,len(lines)):
+        poem = poem + (lines[i]) + " \n"
+
+    p = title + "\n" + author + "\n" + poem
+    #print(p, file=sys.stderr)
+    return p
+
+def getRandomJoke():
+    joke = pyjokes.get_joke(language="en", category="neutral")
+    return joke;
+
+print(getRandomJoke(), file=sys.stderr)
+
+def getRandomAdvice():
+    return;
 
 # set up flask-login for user authentication
 login_manager = flask_login.LoginManager()
