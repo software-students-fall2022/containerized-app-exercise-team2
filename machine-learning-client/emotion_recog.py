@@ -18,17 +18,20 @@ class Model:
 
     #Takes a picture then transforms it for the model
     #The model then processes it and returns 
-    def read_picture(self):
-        capture = cv2.VideoCapture(0)
-        __, pic = capture.read()
+    def read_picture(self, pic = None):
+        if not pic:
+            capture = cv2.VideoCapture(0)
+            __, pic = capture.read()
         cascade = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_default.xml')
-        cv2.imshow('window',pic)
-        cv2.waitKey(0) 
-        cv2.destroyAllWindows() 
+        # cv2.imshow('window',pic)
+        # cv2.waitKey(0) 
+        # cv2.destroyAllWindows() 
         gray = cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
         faces = cascade.detectMultiScale(gray, 1.1, 0)
         for (x, y, w, h) in faces:
             face = gray[y:y+h, x:x+w]
+        if not face:
+            raise Exception('No faces detected') 
         capture.release()
         pil_pic = Image.fromarray(face)
 
@@ -48,6 +51,6 @@ class Model:
         _, preds = torch.max(outputs, 1)
         return self.emotions[int(preds)]
 
-temp = Model()
-pic = temp.read_picture()
-print(pic[0])
+# temp = Model()
+# pic = temp.read_picture()
+# print(pic[0])
