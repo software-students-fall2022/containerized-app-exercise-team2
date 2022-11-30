@@ -32,3 +32,8 @@ def test_register(app_with_database):
     response = app_with_database.get(response.request.path, query_string={'username': 'Santa Claus', 'password': 'Christmas'}, follow_redirects = True)
     assert response.status_code == 200
     assert response.request.path == '/home'
+
+def test_history_page(app_with_data):
+    url='/history'
+    response = app_with_data.get(url)
+    assert response.status_code == 200

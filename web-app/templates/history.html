@@ -49,11 +49,11 @@
 		<form action="/history" method="get">
 			<label>
 			  Start Date:
-			  <input type="date" name="start_date" />
+			  <input id="start_date" type="date" name="start_date" value="{{ start_date }}"/>
 			</label>
 			<label>
 				End Date:
-				<input type="date" name="end_date" />
+				<input type="date" name="end_date" value="{{ end_date }}"/>
 			</label>
 			<button>Search</button>
 		</form>

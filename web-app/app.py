@@ -4,7 +4,7 @@ from os import urandom
 from bson.json_util import dumps, loads
 from bson.objectid import ObjectId
 import sys
-from datetime import datetime
+from datetime import datetime, date
 from dotenv import dotenv_values
 import certifi
 import re
@@ -240,13 +240,17 @@ def uploadFile():
 def view_history():
     start_date = request.args.get("start_date")
     end_date = request.args.get("end_date")
+    if(start_date is None):
+        start_date='2000-01-01'
+    if(end_date is None):
+        today = date.today()
+        end_date= today.strftime('%Y-%m-%d')
     moods=None
-    if(start_date and end_date):
-        user_oid= flask_login.current_user.data['_id']
-        cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
-        moods= loads(dumps(cursor))
-        print(moods)
-    return render_template("history.html", data = moods)
+
+    user_oid= flask_login.current_user.data['_id']
+    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    moods= loads(dumps(cursor))
+    return render_template("history.html", data= moods, start_date=start_date, end_date=end_date)
 
 @app.route('/logout')
 @flask_login.login_required
