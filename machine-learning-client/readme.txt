@@ -1,1 +1,1 @@
-Code related to the machine learning client goes in this folder.
+Kaggle Dataset Used: https://www.kaggle.com/datasets/aadityasinghal/facial-expression-dataset

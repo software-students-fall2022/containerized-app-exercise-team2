@@ -18,10 +18,10 @@ class Model:
 
     #Takes a picture then transforms it for the model
     #The model then processes it and returns 
-    def read_picture(self, pic = None):
-        if not pic:
+    def read_picture(self, capture = None):
+        if not capture:
             capture = cv2.VideoCapture(0)
-            __, pic = capture.read()
+        __, pic = capture.read()
         cascade = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_default.xml')
         # cv2.imshow('window',pic)
         # cv2.waitKey(0) 
