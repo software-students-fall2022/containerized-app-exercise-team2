@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/styles.css">
+    </head>
+    <body>
+        <div class="d-flex justify-content-around">
+            <a href="{{url_for('home')}}">
+                <input type="submit" id="backButton" name="back" value="Back"/>
+            </a>
+            <a href="{{url_for('logout')}}">
+                <input type="submit" id="logoutButton" name="logout" value="Log Out"/>
+            </a>
+        </div>
+        <div class="h-75 d-flex align-items-center justify-content-center">
+            <div class="card card-container col-md-4 mx-auto">
+                <center>
+                    <h3 class="banner mt-3">
+                        Today I am feeling {{mood}}.
+                    </h3>
+                    <img src={{img}}>
+                    {{poem}}
+                </center>
+            </div>
+        </div>
+    </body>
+</html>

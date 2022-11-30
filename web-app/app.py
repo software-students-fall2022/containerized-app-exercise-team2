@@ -40,6 +40,7 @@ def getRandomPoem():
     contents = urlopen(req).read()
     readable = contents.decode('utf-8')
     data = json.loads(readable)
+
     # get poem from url with title
     req = Request(
         url="http://poetrydb.org/title/" + urllib.parse.quote((data['titles'][random.randint(0,2971)]), safe='-\"\\,.:;[]/!’()É_`?*=\''),
@@ -205,7 +206,7 @@ def register():
 @app.route('/home')
 @flask_login.login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", username = flask_login.current_user.data['firstName'])
 
 @app.route('/home', methods=["POST"])
 @flask_login.login_required
@@ -225,12 +226,14 @@ def uploadFile():
     img = Image.open(session['uploaded_img_file_path']).convert('L')
     img.save('static/uploads/greyscale.png')
 
-
-    # find user data like array of tasks
-    #flask_login.current_user.data['todos']
-
-    # pass in today todos and the user's username to the homepage template
-    return render_template("home.html")
+    # get mood and redirect accordingly here
+    mood = 'angry' # angry disgust fear happy neutral sad surprise
+    if mood == 'angry' or mood == 'sad':
+        return redirect(url_for('advice'))
+    elif mood == 'disgust' or 'surprise':
+        return redirect(url_for('joke'))
+    else: # mood == 'happy' or 'neutral':
+        return redirect(url_for('poem'))
 
 @app.route('/history', methods=["GET"])
 @flask_login.login_required
@@ -243,7 +246,7 @@ def view_history():
         cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
         moods= loads(dumps(cursor))
         print(moods)
-    return render_template("history.html", data= moods)
+    return render_template("history.html", data = moods)
 
 @app.route('/logout')
 @flask_login.login_required
@@ -253,6 +256,30 @@ def logout():
     """
     flask_login.logout_user()
     return(redirect(url_for("login")))
+
+@app.route('/poem')
+@flask_login.login_required
+def poem():
+    """
+    Route to page with poem
+    """
+    return render_template("poem.html", poem = getRandomPoem())
+
+@app.route('/joke')
+@flask_login.login_required
+def joke():
+    """
+    Route to page with joke
+    """
+    return render_template("joke.html", joke = getRandomJoke())
+
+@app.route('/advice')
+@flask_login.login_required
+def advice():
+    """
+    Route to page with advice
+    """
+    return render_template("advice.html", advice = getRandomAdvice())
 
 if __name__=='__main__':
     app.run(debug=True)
