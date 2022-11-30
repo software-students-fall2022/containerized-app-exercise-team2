@@ -12,27 +12,30 @@ class Model:
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
-        self.model.load_state_dict(torch.load("machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load("C:/Users/John Kolibachuk/Desktop/NYU/Fall 2022/software_engineering/containerized-app-exercise-team2-1/machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
         self.model.eval()
         self.emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
     #Takes a picture then transforms it for the model
     #The model then processes it and returns 
     def read_picture(self, pic = None):
-        if not pic:
+        capture = None
+        if pic is None:
             capture = cv2.VideoCapture(0)
             __, pic = capture.read()
-        cascade = cv2.CascadeClassifier('machine-learning-client/haarcascade_frontalface_default.xml')
+        cascade = cv2.CascadeClassifier('C:/Users/John Kolibachuk/Desktop/NYU/Fall 2022/software_engineering/containerized-app-exercise-team2-1/machine-learning-client/haarcascade_frontalface_default.xml')
         # cv2.imshow('window',pic)
         # cv2.waitKey(0) 
         # cv2.destroyAllWindows() 
         gray = cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
         faces = cascade.detectMultiScale(gray, 1.1, 0)
+        face = None
         for (x, y, w, h) in faces:
             face = gray[y:y+h, x:x+w]
-        if not face:
+        if face is None:
             raise Exception('No faces detected') 
-        capture.release()
+        if capture is not None:
+            capture.release()
         pil_pic = Image.fromarray(face)
 
         data_transforms = transforms.Compose([
