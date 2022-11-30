@@ -16,6 +16,12 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
+import random
+import json
+from urllib.request import Request, urlopen
+import urllib.parse
+import pyjokes
+
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -23,6 +29,50 @@ Database.initialize()
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = urandom(32)
+
+# gets resource from api
+def getRandomPoem():
+    # get random poem title
+    req = Request(
+        url='http://poetrydb.org/title',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+
+    # get poem from url with title
+    req = Request(
+        url="http://poetrydb.org/title/" + urllib.parse.quote((data['titles'][random.randint(0,2971)]), safe='-\"\\,.:;[]/!’()É_`?*=\''),
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    title = data[0]['title']
+    author = data[0]['author']
+    lines = data[0]['lines']
+    poem = "\n"
+    for i in range(0,len(lines)):
+        poem = poem + (lines[i]) + " \n"
+
+    p = title + "\n" + author + "\n" + poem
+    #print(p, file=sys.stderr)
+    return p
+
+def getRandomJoke():
+    joke = pyjokes.get_joke(language="en", category="neutral")
+    return joke;
+
+def getRandomAdvice():
+    req = Request(
+        url='https://api.adviceslip.com/advice',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    return data["slip"]["advice"];
 
 # set up flask-login for user authentication
 login_manager = flask_login.LoginManager()
@@ -156,7 +206,7 @@ def register():
 @app.route('/home')
 @flask_login.login_required
 def home():
-    return render_template("home.html", userId= flask_login.current_user.data['lastName'])
+    return render_template("home.html", username = flask_login.current_user.data['firstName'])
 
 @app.route('/home', methods=["POST"])
 @flask_login.login_required
@@ -176,12 +226,14 @@ def uploadFile():
     img = Image.open(session['uploaded_img_file_path']).convert('L')
     img.save('static/uploads/greyscale.png')
 
-
-    # find user data like array of tasks
-    #flask_login.current_user.data['todos']
-
-    # pass in today todos and the user's username to the homepage template
-    return render_template("home.html",userId=flask_login.current_user.data['lastName'] )
+    # get mood and redirect accordingly here
+    mood = 'angry' # angry disgust fear happy neutral sad surprise
+    if mood == 'angry' or mood == 'sad':
+        return redirect(url_for('advice'))
+    elif mood == 'disgust' or 'surprise':
+        return redirect(url_for('joke'))
+    else: # mood == 'happy' or 'neutral':
+        return redirect(url_for('poem'))
 
 @app.route('/history', methods=["GET"])
 @flask_login.login_required
@@ -194,6 +246,7 @@ def view_history():
         today = date.today()
         end_date= today.strftime('%Y-%m-%d')
     moods=None
+
     user_oid= flask_login.current_user.data['_id']
     cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
     moods= loads(dumps(cursor))
@@ -207,6 +260,30 @@ def logout():
     """
     flask_login.logout_user()
     return(redirect(url_for("login")))
+
+@app.route('/poem')
+@flask_login.login_required
+def poem():
+    """
+    Route to page with poem
+    """
+    return render_template("poem.html", poem = getRandomPoem())
+
+@app.route('/joke')
+@flask_login.login_required
+def joke():
+    """
+    Route to page with joke
+    """
+    return render_template("joke.html", joke = getRandomJoke())
+
+@app.route('/advice')
+@flask_login.login_required
+def advice():
+    """
+    Route to page with advice
+    """
+    return render_template("advice.html", advice = getRandomAdvice())
 
 if __name__=='__main__':
     app.run(debug=True)
