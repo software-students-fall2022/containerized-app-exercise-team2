@@ -208,32 +208,25 @@ def register():
 def home():
     return render_template("home.html", username = flask_login.current_user.data['firstName'])
 
-@app.route('/home', methods=["POST"])
+@app.route('/boost', methods=["GET"])
 @flask_login.login_required
-def uploadFile():
+def boost():
     """
     Route for the home page
     """
-    # Upload file flask
-    uploaded_img = request.files['uploaded-file']
-    # Extracting uploaded data file name
-    img_filename = secure_filename(uploaded_img.filename)
-    # Upload file to database (defined uploaded folder in static path)
-    uploaded_img.save(os.path.join(app.config['UPLOAD_FOLDER'], img_filename))
-    # Storing uploaded file path in flask session
-    session['uploaded_img_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-
-    img = Image.open(session['uploaded_img_file_path']).convert('L')
-    img.save('static/uploads/greyscale.png')
-
-    # get mood and redirect accordingly here
-    mood = 'angry' # angry disgust fear happy neutral sad surprise
+    # get most recent mood and redirect accordingly
+    user_oid = flask_login.current_user.data['_id']
+    cursor = Database.find_first_sorted('mood', {'user': ObjectId(user_oid)}) # angry disgust fear happy neutral sad surprise
+    latest = loads(dumps(cursor))[0]
+    mood = latest["mood"]
     if mood == 'angry' or mood == 'sad':
-        return redirect(url_for('advice'))
-    elif mood == 'disgust' or 'surprise':
-        return redirect(url_for('joke'))
-    else: # mood == 'happy' or 'neutral':
-        return redirect(url_for('poem'))
+        return redirect(url_for('advice', mood = mood))
+    elif mood == 'disgust' or mood == 'surprise':
+        return redirect(url_for('joke', mood = mood))
+    elif mood == 'happy' or mood == 'neutral':
+        return redirect(url_for('poem', mood = mood))
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/history', methods=["GET"])
 @flask_login.login_required
@@ -288,7 +281,8 @@ def poem():
     """
     Route to page with poem
     """
-    return render_template("poem.html", poem = getRandomPoem())
+    mood = request.args['mood']
+    return render_template("poem.html", poem = getRandomPoem(), mood = mood)
 
 @app.route('/joke')
 @flask_login.login_required
@@ -296,7 +290,8 @@ def joke():
     """
     Route to page with joke
     """
-    return render_template("joke.html", joke = getRandomJoke())
+    mood = request.args['mood']
+    return render_template("joke.html", joke = getRandomJoke(), mood = mood)
 
 @app.route('/advice')
 @flask_login.login_required
@@ -304,7 +299,8 @@ def advice():
     """
     Route to page with advice
     """
-    return render_template("advice.html", advice = getRandomAdvice())
+    mood = request.args['mood']
+    return render_template("advice.html", advice = getRandomAdvice(), mood = mood)
 
 if __name__=='__main__':
     app.run(debug=True)

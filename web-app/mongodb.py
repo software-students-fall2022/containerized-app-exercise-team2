@@ -42,6 +42,11 @@ class Database(object):
         return (Database.database[collection].find_one(query,field))
 
     @staticmethod
+    def find_first_sorted(collection, query, field=""):
+        #print(Database.database, file=sys.stderr);
+        return (Database.database[collection].find(query,field).limit(1))
+
+    @staticmethod
     def delete(collection, query):
         return Database.database[collection].delete_one(query)
 
