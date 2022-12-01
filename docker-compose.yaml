@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mongo:latest
+    ports: 
+      - "27017:27017"
+    
+  webapp:
+    build: ./web-app
+    ports:
+      - "6001:6001"
+    depends_on:
+      - db
