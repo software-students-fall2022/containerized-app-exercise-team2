@@ -244,13 +244,34 @@ def view_history():
         start_date='2000-01-01'
     if(end_date is None):
         today = date.today()
+        end_date = today.strftime('%Y-%m-%d')
+    moods = None
+
+    user_oid = flask_login.current_user.data['_id']
+    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    moods = loads(dumps(cursor))
+    return render_template("history.html", data= moods, start_date=start_date, end_date=end_date)
+
+@app.route('/historyWeekly', methods=["GET"])
+@flask_login.login_required
+def view_history_weekly():
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+    if(start_date is None):
+        start_date='2000-01-01'
+    if(end_date is None):
+        today = date.today()
         end_date= today.strftime('%Y-%m-%d')
-    moods=None
+    moods = None
 
     user_oid= flask_login.current_user.data['_id']
-    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
-    moods= loads(dumps(cursor))
-    return render_template("history.html", data= moods, start_date=start_date, end_date=end_date)
+    cursor = Database.findWeekly('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    #cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    moods = loads(dumps(cursor))
+    for item in moods:
+        item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
+    print(moods, file=sys.stderr)
+    return render_template("historyWeekly.html", data = moods, start_date=start_date, end_date=end_date)
 
 @app.route('/logout')
 @flask_login.login_required
