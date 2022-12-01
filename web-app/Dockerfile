@@ -11,6 +11,6 @@ ADD . /web-app
 RUN pip install -r requirements.txt
 # by default Docker containers are closed off to the external world
 # Make port 80 available to the world outside this container
-EXPOSE 6001
+EXPOSE 80
 # Run app.py when the container launches
 CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
