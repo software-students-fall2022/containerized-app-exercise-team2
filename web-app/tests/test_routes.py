@@ -9,30 +9,6 @@ def test_login(app_with_data):
     assert response.status_code == 200
     assert response.request.path=='/home'
 
-def test_logout(app_with_data):
-    url='/logout'
-    response = app_with_data.get(url, follow_redirects=True)
-    assert response.status_code == 200
-    assert response.request.path == '/'
-    response = app_with_data.get('/register')
-    assert response.status_code == 200
-    assert response.request.path == '/register'
-
-def test_register_page(app_with_database):
-    url='/register'
-    response = app_with_database.get(url)
-    assert response.request.path == '/register'
-    assert response.status_code == 200
-
-def test_register(app_with_database):
-    url='/register'
-    response = app_with_database.post(url, data={'username': 'Santa Claus', 'firstName': 'Santa', 'lastName': 'Claus', 'password':'Christmas'},follow_redirects=True)
-    assert response.status_code == 200
-    assert response.request.path=='/'
-    response = app_with_database.get(response.request.path, query_string={'username': 'Santa Claus', 'password': 'Christmas'}, follow_redirects = True)
-    assert response.status_code == 200
-    assert response.request.path == '/home'
-
 def test_history_page(app_with_data):
     url='/history'
     response = app_with_data.get(url)
@@ -61,3 +37,27 @@ def test_weekly_page(app_with_database):
     response = app_with_database.get(url)
     assert response.request.path == '/historyWeekly'
     assert response.status_code == 200
+
+def test_logout(app_with_data):
+    url='/logout'
+    response = app_with_data.get(url, follow_redirects=True)
+    assert response.status_code == 200
+    assert response.request.path == '/'
+    response = app_with_data.get('/register')
+    assert response.status_code == 200
+    assert response.request.path == '/register'
+
+def test_register_page(app_with_database):
+    url='/register'
+    response = app_with_database.get(url)
+    assert response.request.path == '/register'
+    assert response.status_code == 200
+
+def test_register(app_with_database):
+    url='/register'
+    response = app_with_database.post(url, data={'username': 'Santa Claus', 'firstName': 'Santa', 'lastName': 'Claus', 'password':'Christmas'},follow_redirects=True)
+    assert response.status_code == 200
+    assert response.request.path=='/'
+    response = app_with_database.get(response.request.path, query_string={'username': 'Santa Claus', 'password': 'Christmas'}, follow_redirects = True)
+    assert response.status_code == 200
+    assert response.request.path == '/home'
