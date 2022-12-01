@@ -259,11 +259,9 @@ def view_history_weekly():
 
     user_oid= flask_login.current_user.data['_id']
     cursor = Database.findWeekly('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
-    #cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
     moods = loads(dumps(cursor))
     for item in moods:
         item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
-    print(moods, file=sys.stderr)
     return render_template("historyWeekly.html", data = moods, start_date=start_date, end_date=end_date)
 
 @app.route('/logout')

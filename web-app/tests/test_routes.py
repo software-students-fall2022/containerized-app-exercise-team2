@@ -55,3 +55,9 @@ def test_joke_page(app_with_database):
     response = app_with_database.get(url)
     assert response.request.path == '/joke'
     assert response.status_code == 200
+
+def test_weekly_page(app_with_database):
+    url='/historyWeekly'
+    response = app_with_database.get(url)
+    assert response.request.path == '/historyWeekly'
+    assert response.status_code == 200
