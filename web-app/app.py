@@ -281,7 +281,11 @@ def poem():
     """
     Route to page with poem
     """
-    mood = request.args['mood']
+    mood = None
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
     return render_template("poem.html", poem = getRandomPoem(), mood = mood)
 
 @app.route('/joke')
@@ -290,7 +294,10 @@ def joke():
     """
     Route to page with joke
     """
-    mood = request.args['mood']
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
     return render_template("joke.html", joke = getRandomJoke(), mood = mood)
 
 @app.route('/advice')
@@ -299,7 +306,10 @@ def advice():
     """
     Route to page with advice
     """
-    mood = request.args['mood']
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
     return render_template("advice.html", advice = getRandomAdvice(), mood = mood)
 
 if __name__=='__main__':
