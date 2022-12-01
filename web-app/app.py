@@ -217,8 +217,11 @@ def boost():
     # get most recent mood and redirect accordingly
     user_oid = flask_login.current_user.data['_id']
     cursor = Database.find_first_sorted('mood', {'user': ObjectId(user_oid)}) # angry disgust fear happy neutral sad surprise
-    latest = loads(dumps(cursor))[0]
-    mood = latest["mood"]
+    temp = loads(dumps(cursor))
+    mood = None
+    if len(temp) > 0:
+        latest = temp[0]
+        mood = latest["mood"]
     if mood == 'angry' or mood == 'sad':
         return redirect(url_for('advice', mood = mood))
     elif mood == 'disgust' or mood == 'surprise':
