@@ -7,6 +7,6 @@ services:
   webapp:
     build: ./web-app
     ports:
-      - "80:80"
+      - "5000:5000"
     depends_on:
       - db
