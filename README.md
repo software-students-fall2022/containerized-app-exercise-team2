@@ -10,7 +10,8 @@ This web application translates a person's facial expression into words. The use
 2. Flask login is used for access, thus in order to access the functionalities of the app, an account must be created after running the project.
 
 ## Run the Project
-1. At the root folder of the project run using the command
+1. The current port that the containers use for the app is 5000. Verify that no other app is running on that port before running the project.
+2. At the root folder of the project run using the command
 ```
 docker compose up
 ```
