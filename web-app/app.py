@@ -221,7 +221,7 @@ def boost():
     mood = None
     if len(temp) > 0:
         latest = temp[0]
-        mood = latest["mood"]
+        mood = latest["mood"].lower()
     if mood == 'angry' or mood == 'sad':
         return redirect(url_for('advice', mood = mood))
     elif mood == 'disgust' or mood == 'surprise':
@@ -317,4 +317,3 @@ if __name__=='__main__':
     #app.run(debug=True)
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
-
