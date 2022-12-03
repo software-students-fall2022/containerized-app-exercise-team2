@@ -27,5 +27,5 @@ python -m pytest
 - Adam Sidibe: [Github]()
 - Alexander Chen: [Github]()
 - Wuji Cao: [Github]()
-- John Kolibachuk: [Github]()
+- John Kolibachuk: [Github](https://github.com/jkolib)
 - Seok Tae Kim: [Github](https://github.com/seoktaekim)
