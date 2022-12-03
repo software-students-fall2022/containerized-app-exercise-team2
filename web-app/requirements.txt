@@ -48,13 +48,5 @@ rich==12.6.0
 sentinels==1.0.0
 six==1.16.0
 tomli==2.0.1
-torch==1.13.0
-torchvision==0.14.0
-twine==4.0.1
-typing_extensions==4.4.0
-urllib3==1.26.12
-virtualenv==20.16.6
-virtualenv-clone==0.5.7
-webencodings==0.5.1
-Werkzeug==2.2.2
-zipp==3.10.0
+
+

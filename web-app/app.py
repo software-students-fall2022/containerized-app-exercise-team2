@@ -4,7 +4,7 @@ from os import urandom
 from bson.json_util import dumps, loads
 from bson.objectid import ObjectId
 import sys
-from datetime import datetime
+from datetime import datetime, date
 from dotenv import dotenv_values
 import certifi
 import re
@@ -16,6 +16,12 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
+import random
+import json
+from urllib.request import Request, urlopen
+import urllib.parse
+import pyjokes
+
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -23,6 +29,50 @@ Database.initialize()
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = urandom(32)
+
+# gets resource from api
+def getRandomPoem():
+    # get random poem title
+    req = Request(
+        url='http://poetrydb.org/title',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+
+    # get poem from url with title
+    req = Request(
+        url="http://poetrydb.org/title/" + urllib.parse.quote((data['titles'][random.randint(0,2971)]), safe='-\"\\,.:;[]/!’()É_`?*=\''),
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    title = data[0]['title']
+    author = data[0]['author']
+    lines = data[0]['lines']
+    poem = "\n"
+    for i in range(0,len(lines)):
+        poem = poem + (lines[i]) + " \n"
+
+    p = title + "\n" + author + "\n" + poem
+    #print(p, file=sys.stderr)
+    return p
+
+def getRandomJoke():
+    joke = pyjokes.get_joke(language="en", category="neutral")
+    return joke;
+
+def getRandomAdvice():
+    req = Request(
+        url='https://api.adviceslip.com/advice',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    contents = urlopen(req).read()
+    readable = contents.decode('utf-8')
+    data = json.loads(readable)
+    return data["slip"]["advice"];
 
 # set up flask-login for user authentication
 login_manager = flask_login.LoginManager()
@@ -156,45 +206,66 @@ def register():
 @app.route('/home')
 @flask_login.login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", username = flask_login.current_user.data['firstName'])
 
-@app.route('/home', methods=["POST"])
+@app.route('/boost', methods=["GET"])
 @flask_login.login_required
-def uploadFile():
+def boost():
     """
     Route for the home page
     """
-    # Upload file flask
-    uploaded_img = request.files['uploaded-file']
-    # Extracting uploaded data file name
-    img_filename = secure_filename(uploaded_img.filename)
-    # Upload file to database (defined uploaded folder in static path)
-    uploaded_img.save(os.path.join(app.config['UPLOAD_FOLDER'], img_filename))
-    # Storing uploaded file path in flask session
-    session['uploaded_img_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], img_filename)
-
-    img = Image.open(session['uploaded_img_file_path']).convert('L')
-    img.save('static/uploads/greyscale.png')
-
-
-    # find user data like array of tasks
-    #flask_login.current_user.data['todos']
-
-    # pass in today todos and the user's username to the homepage template
-    return render_template("home.html")
+    # get most recent mood and redirect accordingly
+    user_oid = flask_login.current_user.data['_id']
+    cursor = Database.find_first_sorted('mood', {'user': ObjectId(user_oid)}) # angry disgust fear happy neutral sad surprise
+    temp = loads(dumps(cursor))
+    mood = None
+    if len(temp) > 0:
+        latest = temp[0]
+        mood = latest["mood"]
+    if mood == 'angry' or mood == 'sad':
+        return redirect(url_for('advice', mood = mood))
+    elif mood == 'disgust' or mood == 'surprise':
+        return redirect(url_for('joke', mood = mood))
+    elif mood == 'happy' or mood == 'neutral':
+        return redirect(url_for('poem', mood = mood))
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/history', methods=["GET"])
 @flask_login.login_required
 def view_history():
     start_date = request.args.get("start_date")
     end_date = request.args.get("end_date")
-    moods=None
-    if(start_date and end_date):
-        user_oid= flask_login.current_user.data['_id']
-        cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
-        moods= loads(dumps(cursor))
-        print(moods)
-    return render_template("history.html", data= moods)
+    if(start_date is None):
+        start_date='2000-01-01'
+    if(end_date is None):
+        today = date.today()
+        end_date = today.strftime('%Y-%m-%d')
+    moods = None
+
+    user_oid = flask_login.current_user.data['_id']
+    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    moods = loads(dumps(cursor))
+    return render_template("history.html", data= moods, start_date=start_date, end_date=end_date)
+
+@app.route('/historyWeekly', methods=["GET"])
+@flask_login.login_required
+def view_history_weekly():
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+    if(start_date is None):
+        start_date='2000-01-01'
+    if(end_date is None):
+        today = date.today()
+        end_date= today.strftime('%Y-%m-%d')
+    moods = None
+
+    user_oid= flask_login.current_user.data['_id']
+    cursor = Database.findWeekly('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    moods = loads(dumps(cursor))
+    for item in moods:
+        item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
+    return render_template("historyWeekly.html", data = moods, start_date=start_date, end_date=end_date)
 
 @app.route('/logout')
 @flask_login.login_required
@@ -205,5 +276,45 @@ def logout():
     flask_login.logout_user()
     return(redirect(url_for("login")))
 
+@app.route('/poem')
+@flask_login.login_required
+def poem():
+    """
+    Route to page with poem
+    """
+    mood = None
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
+    return render_template("poem.html", poem = getRandomPoem(), mood = mood)
+
+@app.route('/joke')
+@flask_login.login_required
+def joke():
+    """
+    Route to page with joke
+    """
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
+    return render_template("joke.html", joke = getRandomJoke(), mood = mood)
+
+@app.route('/advice')
+@flask_login.login_required
+def advice():
+    """
+    Route to page with advice
+    """
+    if 'mood' in request.args:
+        mood = request.args['mood']
+    else:
+        mood = 'sneaky'
+    return render_template("advice.html", advice = getRandomAdvice(), mood = mood)
+
 if __name__=='__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
+

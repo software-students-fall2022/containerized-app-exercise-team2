@@ -9,6 +9,35 @@ def test_login(app_with_data):
     assert response.status_code == 200
     assert response.request.path=='/home'
 
+def test_history_page(app_with_data):
+    url='/history'
+    response = app_with_data.get(url)
+    assert response.status_code == 200
+
+def test_advise_page(app_with_database):
+    url='/advice'
+    response = app_with_database.get(url)
+    assert response.request.path == '/advice'
+    assert response.status_code == 200
+
+def test_poem_page(app_with_database):
+    url='/poem'
+    response = app_with_database.get(url)
+    assert response.request.path == '/poem'
+    assert response.status_code == 200
+
+def test_joke_page(app_with_database):
+    url='/joke'
+    response = app_with_database.get(url)
+    assert response.request.path == '/joke'
+    assert response.status_code == 200
+
+def test_weekly_page(app_with_database):
+    url='/historyWeekly'
+    response = app_with_database.get(url)
+    assert response.request.path == '/historyWeekly'
+    assert response.status_code == 200
+
 def test_logout(app_with_data):
     url='/logout'
     response = app_with_data.get(url, follow_redirects=True)
