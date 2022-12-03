@@ -31,7 +31,7 @@ class Model:
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
-        self.model.load_state_dict(torch.load("C:/Users/John Kolibachuk/Desktop/NYU/Fall 2022/software_engineering/containerized-app-exercise-team2-1/machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load("emotion_recog_1.pth", map_location=torch.device('cpu')))
         self.model.eval()
         self.emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
@@ -46,7 +46,7 @@ class Model:
         return pic
 
     def classify(self, pic):
-        cascade = cv2.CascadeClassifier('C:/Users/John Kolibachuk/Desktop/NYU/Fall 2022/software_engineering/containerized-app-exercise-team2-1/machine-learning-client/haarcascade_frontalface_default.xml')
+        cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         gray = cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
         faces = cascade.detectMultiScale(gray, 1.1, 0)
         face = None
