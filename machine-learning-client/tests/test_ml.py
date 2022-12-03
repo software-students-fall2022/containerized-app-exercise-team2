@@ -1,7 +1,7 @@
 import emotion_recog as ml
 import cv2
 import pytest
-# pytest -p no:faulthandler test_ml.py
+
 class Test:
     def test_sanity_check(self):
         assert True == True, 'expect True to be True'
@@ -10,7 +10,7 @@ class Test:
     Tests client's ability to correctly throw an error when no face is present in an image
     '''
     def test_image_with_no_face(self):
-        img = cv2.imread('./test_images/tree.png')
+        img = cv2.imread('./test_images/clarinet.jpg')
 
         model = ml.Model()
 
@@ -67,3 +67,7 @@ class Test:
 
         assert model.read_picture(img) == 'Happy'
     
+    def test_picture_capture(self):
+        model = ml.Model()
+        pic = model.cap_picture()
+        assert len(pic) > 0
