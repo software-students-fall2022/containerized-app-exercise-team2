@@ -30,11 +30,11 @@ class Model:
     def __init__(self):
         # self.recog = str(Path('emotion_recog_1.pth').resolve())
         # self.cas = str(Path('haarcascade_frontalface_default.xml').resolve())
-        recog = str(Path('emotion_recog_1.pth').resolve())
+        # recog = str(Path('emotion_recog_1.pth').resolve())
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
-        self.model.load_state_dict(torch.load(recog, map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load("machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
         self.model.eval()
         self.emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
@@ -51,8 +51,8 @@ class Model:
 
     @staticmethod
     def detect(pic):
-        cas = str(Path('haarcascade_frontalface_default.xml').resolve())
-        cascade = cv2.CascadeClassifier(cas)
+        cas = 'haarcascade_frontalface_default.xml'
+        cascade = cv2.CascadeClassifier(cv2.data.haarcascades + cas)
 
         gray = cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
 
