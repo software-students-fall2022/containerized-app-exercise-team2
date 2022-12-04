@@ -34,7 +34,7 @@ flask run
 python -m pytest
 ```
 ## Authors
-- Brandon Chen: [Github]()
+- Brandon Chen: [Github](https://github.com/b-chen00)
 - Adam Sidibe: [Github]()
 - Alexander Chen: [Github]()
 - Wuji Cao: [Github]()
