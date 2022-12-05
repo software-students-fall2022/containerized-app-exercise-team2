@@ -222,7 +222,7 @@ def boost():
     if len(temp) > 0:
         latest = temp[0]
         mood = latest["mood"].lower()
-    if mood == 'angry' or mood == 'sad':
+    if mood == 'angry' or mood == 'sad' or 'fear':
         return redirect(url_for('advice', mood = mood))
     elif mood == 'disgust' or mood == 'surprise':
         return redirect(url_for('joke', mood = mood))
