@@ -1,4 +1,4 @@
-name: Build & test
+name: web-app build & test
 on: [push]
 jobs:
   build:
