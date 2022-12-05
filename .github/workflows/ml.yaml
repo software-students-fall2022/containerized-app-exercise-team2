@@ -3,6 +3,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./machine-learning-client
     timeout-minutes: 5
     strategy:
       matrix:
@@ -21,4 +24,4 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
         run: |
-          python -m pytest machine-learning-client/tests
+          python -m pytest
