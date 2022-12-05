@@ -1,0 +1,7 @@
+certifi==2022.9.24
+opencv_python==4.6.0.66
+Pillow==9.3.0
+pymongo==4.3.2
+pytest==7.2.0
+torch==1.13.0
+torchvision==0.14.0
