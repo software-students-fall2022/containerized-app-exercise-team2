@@ -100,7 +100,7 @@ class Model:
 
 def main():
     print('This app will make use of your camera to take a photo and analyze your mood.')
-    print('Please head to URL_HERE to view a history of your moods.')
+    
     model = Model()
 
     user = None
@@ -117,10 +117,10 @@ def main():
     while(True):
         inp = input('Use camera for picture upload? y/n: ')
 
-        if inp.lower() == 'y':
+        if inp.lower() == 'n':
             imgPath = input('Enter filepath of picture: ')
             break
-        elif inp.lower() == 'n':
+        elif inp.lower() == 'y':
             break
         else:
             print('Invalid input')
@@ -138,6 +138,7 @@ def main():
         'user': user['_id']
     })
     print('Done!')
+    print('Please head to http://127.0.0.1:5000/ to view a history of your moods.')
 
 if __name__ == '__main__':
     main()
