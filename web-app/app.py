@@ -4,7 +4,7 @@ from os import urandom
 from bson.json_util import dumps, loads
 from bson.objectid import ObjectId
 import sys
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dotenv import dotenv_values
 import certifi
 import re
@@ -222,7 +222,7 @@ def boost():
     if len(temp) > 0:
         latest = temp[0]
         mood = latest["mood"].lower()
-    if mood == 'angry' or mood == 'sad':
+    if mood == 'angry' or mood == 'sad' or 'fear':
         return redirect(url_for('advice', mood = mood))
     elif mood == 'disgust' or mood == 'surprise':
         return redirect(url_for('joke', mood = mood))
@@ -244,7 +244,7 @@ def view_history():
     moods = None
 
     user_oid = flask_login.current_user.data['_id']
-    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)}})
     moods = loads(dumps(cursor))
     return render_template("history.html", data= moods, start_date=start_date, end_date=end_date)
 
@@ -261,7 +261,7 @@ def view_history_weekly():
     moods = None
 
     user_oid= flask_login.current_user.data['_id']
-    cursor = Database.findWeekly('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+    cursor = Database.findWeekly('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=3)}})
     moods = loads(dumps(cursor))
     for item in moods:
         item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
