@@ -25,4 +25,3 @@ jobs:
       - name: Test with pytest
         run: |
           python -m pytest web-app/tests
-          python -m pytest machine-learning-client/tests
