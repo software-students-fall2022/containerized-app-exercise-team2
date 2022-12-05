@@ -10,9 +10,10 @@
 This web application translates a person's facial expression into words. The user would be able to view their emotion history and receive a random text depending on their latest emotion. We serve to support and journal your emotions!
 
 ## SetUp
+1. Our machine-learning-client requires camera access. `Check to see if your computer's camera is fully functional.`
+2. Flask login is used for access, thus in order to access the functionalities of the app, an `account must be created` after running the project.
 
-1. Our machine-learning-client requires camera access. Check to see if your computer's camera is fully functional.
-2. Flask login is used for access, thus in order to access the functionalities of the app, an account must be created after running the project.
+More instructions for running the ML client in the machine-learning-client folder readme
 
 ## Run the Project
 
