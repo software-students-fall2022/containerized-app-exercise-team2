@@ -9,6 +9,8 @@ This web application translates a person's facial expression into words. The use
 1. Our machine-learning-client requires camera access. `Check to see if your computer's camera is fully functional.`
 2. Flask login is used for access, thus in order to access the functionalities of the app, an `account must be created` after running the project.
 
+More instructions for running the ML client in the machine-learning-client folder readme
+
 ## Run the Project With Containers
 1. In order to utilize the containers download `Docker` from https://docs.docker.com/get-docker/
 2. Run docker in the background
