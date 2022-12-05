@@ -33,6 +33,10 @@ flask run
 ```
 python -m pytest
 ```
+2. To test for `coverage` run the command
+```
+coverage run -m pytest ./tests/*.py
+```
 ## Authors
 - Brandon Chen: [Github](https://github.com/b-chen00)
 - Adam Sidibe: [Github]()

@@ -1,3 +1,5 @@
+from app import getRandomAdvice, getRandomPoem, getRandomJoke
+
 def test_login_page(app_with_data):
     url='/'
     response = app_with_data.get(url)
@@ -61,3 +63,15 @@ def test_register(app_with_database):
     response = app_with_database.get(response.request.path, query_string={'username': 'Santa Claus', 'password': 'Christmas'}, follow_redirects = True)
     assert response.status_code == 200
     assert response.request.path == '/home'
+
+def test_getRandomAdvice():
+    advice = getRandomAdvice()
+    assert advice != None
+
+def test_getRandomPoem():
+    advice = getRandomPoem()
+    assert advice != None
+
+def test_getRandomJoke():
+    advice = getRandomJoke()
+    assert advice != None
