@@ -38,6 +38,7 @@
 				      	<th scope="col">date</th>
 				      	<th scope="col">mood</th>
 				    </tr>
+
 				  </thead>
 				  <tbody>
 					  {% for i in data %}
@@ -46,6 +47,11 @@
 							<td>{{i.time}}</td>
 							<td>{{i.mood}}</td>
 					  {% endfor %}
+					  <a class="delete-icon" href="{{url_for('delete', mood_id=data._id, dest='history')}}">
+						<span class="del-icons">
+							deleted
+						</span>
+					  </a>
 				  </tbody>
 				</table>
 		{% endif %}
