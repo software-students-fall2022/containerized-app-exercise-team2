@@ -7,6 +7,7 @@ import pymongo
 import certifi
 import sys
 import datetime
+from pathlib import Path
 
 url = "mongodb+srv://admin:admin123@cluster0.b6toxnx.mongodb.net/?retryWrites=true&w=majority"
 database=None
@@ -26,16 +27,19 @@ except Exception as e:
 #Class for the machine learning model
 class Model:
     #Creates the model and loads in the weights for the emotion recognition model I trained
-
     def __init__(self):
+        # self.recog = str(Path('emotion_recog_1.pth').resolve())
+        # self.cas = str(Path('haarcascade_frontalface_default.xml').resolve())
+        # recog = str(Path('emotion_recog_1.pth').resolve())
         self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights = None)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
-        self.model.load_state_dict(torch.load("emotion_recog_1.pth", map_location=torch.device('cpu')))
+        self.model.load_state_dict(torch.load("machine-learning-client/emotion_recog_1.pth", map_location=torch.device('cpu')))
         self.model.eval()
         self.emotions = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
-    def cap_picture(self):
+    @staticmethod
+    def cap_picture():
         capture = cv2.VideoCapture(0)
         __, pic = capture.read()
         # cv2.imread(pic)
@@ -45,41 +49,46 @@ class Model:
         capture.release()
         return pic
 
-    def classify(self, pic):
-        cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    @staticmethod
+    def detect(pic):
+        cas = 'haarcascade_frontalface_default.xml'
+        cascade = cv2.CascadeClassifier(cv2.data.haarcascades + cas)
+
         gray = cv2.cvtColor(pic,cv2.COLOR_BGR2GRAY)
+
         faces = cascade.detectMultiScale(gray, 1.1, 0)
         face = None
         for (x, y, w, h) in faces:
             face = gray[y:y+h, x:x+w]
-
+        
         return face
 
-    def transform(self, face):
+    @staticmethod
+    def transform(face):
         pil_pic = Image.fromarray(face)
 
         data_transforms = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            ])
-
+        ])
         image = data_transforms(pil_pic)
+        
         im_rep = image.repeat(3,1,1)
         normalize = transforms.Compose([
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+        ])
         im_rep = normalize(im_rep)
 
         return im_rep.unsqueeze(0)
 
     #Takes a picture then transforms it for the model
     #The model then processes it and returns 
-    def read_picture(self, pic = None):
+    def classify(self, pic = None):
         if pic is None:
             pic = self.cap_picture()
         
-        face = self.classify(pic)
+        face = self.detect(pic)
 
         if face is None:
             raise Exception('No faces detected') 
@@ -104,10 +113,25 @@ def main():
         else:
             print('Username cannot be found!')
 
-    # db.collection_name.find_one({'username': user, 'password': passwd})
-    # model.cap_picture()
+    imgPath = None
+    while(True):
+        inp = input('Use camera for picture upload? y/n: ')
+
+        if inp.lower() == 'y':
+            imgPath = input('Enter filepath of picture: ')
+            break
+        elif inp.lower() == 'n':
+            break
+        else:
+            print('Invalid input')
+    
     print('Working...')
-    mood = model.read_picture()
+    mood = ''
+    if imgPath is None:
+        mood = model.classify()
+    else:
+        pic = cv2.imread(imgPath)
+        mood = model.classify(pic)
     database.mood.insert_one({
         'mood': mood,
         'time': datetime.datetime.now(),
