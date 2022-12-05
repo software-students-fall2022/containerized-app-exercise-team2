@@ -44,7 +44,7 @@ class Database(object):
     @staticmethod
     def find_first_sorted(collection, query, field=""):
         #print(Database.database, file=sys.stderr);
-        return (Database.database[collection].find(query,field).limit(1))
+        return (Database.database[collection].find(query,field).sort('time', -1).limit(1))
 
     @staticmethod
     def delete(collection, query):
