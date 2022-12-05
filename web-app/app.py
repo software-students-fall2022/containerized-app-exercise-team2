@@ -22,8 +22,8 @@ from urllib.request import Request, urlopen
 import urllib.parse
 import pyjokes
 
-import pandas as pd
-from cccalendar import draw_colour_calendar
+# import pandas as pd
+# from cccalendar import draw_colour_calendar
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -304,39 +304,39 @@ def logout():
     flask_login.logout_user()
     return(redirect(url_for("login")))
 
-@app.route("/moodCalendar")
-@flask_login.login_required
-def moodcalendar():
-    """
-    Route to page with mood calendar
-    """
-    mood = None
-    if 'mood' in request.args:
-        mood = request.args['mood']
-    else:
-        mood = 'n/a'
-    user_oid = flask_login.current_user.data['_id']
-    cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
-    moods = loads(dumps(cursor))   
-    mood_dict = {}
+# @app.route("/moodCalendar")
+# @flask_login.login_required
+# def moodcalendar():
+#     """
+#     Route to page with mood calendar
+#     """
+#     mood = None
+#     if 'mood' in request.args:
+#         mood = request.args['mood']
+#     else:
+#         mood = 'n/a'
+#     user_oid = flask_login.current_user.data['_id']
+#     cursor = Database.find('mood', {'user': ObjectId(user_oid), 'time': {'$gte': datetime.strptime(start_date, '%Y-%m-%d'),'$lt':datetime.strptime(end_date, '%Y-%m-%d')}})
+#     moods = loads(dumps(cursor))   
+#     mood_dict = {}
 
-    for item in moods:
-        item['date'] = item['date'].strftime("%Y-%m-%d")
-        mood_dict[item['date']] = item['mood']
+#     for item in moods:
+#         item['date'] = item['date'].strftime("%Y-%m-%d")
+#         mood_dict[item['date']] = item['mood']
 
-    my_data = pd.Series(mood_dict)
-    #"Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"
-    color_map = {
-        'Angry' : 'r',
-        'Disgust' : 'g',
-        'Fear' : 'k',
-        'Happy' : 'y',
-        'Neutral' : 'w',
-        'Sad' : 'b',
-        'Surprise' : 'c',
-    }
-    calendar = draw_colour_calendar(my_data, color_map, date_colour='#808080')
-    return render_template("moodCalendar.html", calendar = calendar, mood = mood)
+#     my_data = pd.Series(mood_dict)
+#     #"Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"
+#     color_map = {
+#         'Angry' : 'r',
+#         'Disgust' : 'g',
+#         'Fear' : 'k',
+#         'Happy' : 'y',
+#         'Neutral' : 'w',
+#         'Sad' : 'b',
+#         'Surprise' : 'c',
+#     }
+#     calendar = draw_colour_calendar(my_data, color_map, date_colour='#808080')
+#     return render_template("moodCalendar.html", calendar = calendar, mood = mood)
 
 @app.route('/poem')
 @flask_login.login_required
