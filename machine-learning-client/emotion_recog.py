@@ -117,10 +117,10 @@ def main():
     while(True):
         inp = input('Use camera for picture upload? y/n: ')
 
-        if inp.lower() == 'y':
+        if inp.lower() == 'n':
             imgPath = input('Enter filepath of picture: ')
             break
-        elif inp.lower() == 'n':
+        elif inp.lower() == 'y':
             break
         else:
             print('Invalid input')
