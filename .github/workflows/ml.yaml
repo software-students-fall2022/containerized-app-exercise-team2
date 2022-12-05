@@ -18,7 +18,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
           pip install flask
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f ./machine-learning-client/requirements.txt ]; then pip install -r ./machine-learning-client/requirements.txt; fi 
       - name: Test with pytest
         run: |
           python -m pytest machine-learning-client/tests
