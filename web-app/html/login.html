@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>CWJ's Interest</title>
+		<link rel="stylesheet" href="static/css/basic.css">
+		<!-- Media parts copied from course web site  -->
+
+		<!-- Media query for narrow browser width -->
+		<link rel="stylesheet" media="only screen and (max-width: 480px)" href="static/css/basic.css">
+
+		<!-- Media query for medium browser width -->
+		<link rel="stylesheet" media="only screen and (min-width: 481px) and (max-width: 960px)" href="static/css/basic.css">
+
+		<!-- Media query for full browser width -->
+		<link rel="stylesheet" media="only screen and (min-width: 961px)" href="static/css/basic.css">
+
+		<!-- Prevent smartphones from scaling pages down -->
+		<meta name="viewport" content="initial-scale=1">
+
+		<style type="text/css">
+			li {
+				background: rgba(200,150,200,0.7);
+				color: darkblue;
+				margin: 10px auto;
+				border: 5px solid;
+				border-color: rgba(200,150,200,0.7);
+				font-size: 10pt;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>&nbsp&nbsp&nbsp Welcome</h1>
+		<h2 style="float:right">To the route of your mood &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
+		
+		<div class="General">
+			<div class="Article">
+				<h3>This is a site about xxxxooooaaaaaM</h3>
+			</div>
+			<div class="SideBar" style="background-color: rgba(200,100,200,.3);">
+				<h3>Login</h3>
+				<form class="authentication-container" action="/" method="GET">
+					{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<ul class=flashes>
+						{% for message in messages %}
+							<center>{{ message }}</center>
+						{% endfor %}
+						</ul>
+						{% endif %}
+					{% endwith %}
+					<input class="SideText" type="text" id="username" name="username" placeholder="User name" ><br>
+					<input class="SideText"  type="text" id="password" name="password" placeholder="Password" ><br>
+					<button type="submit" id="loginButton" value="Log In" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">Login</button>
+				</form> 
+				
+				<div class="SideText" > <form action="/register">First time user please<button type="submit" id="registerButton" name="register" value="" style="border: 2px solid gray; background-color: rgba(100,200,200,0.5);">register</button></form></div>
+			
+
+
+			</div>
+		</div>
+
+
+		
+
+
+	</body>
+
+</html>
