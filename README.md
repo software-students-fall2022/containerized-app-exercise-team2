@@ -40,11 +40,16 @@ python -m pytest machine-learning-client/tests
 
 ```
 
+2. To test for `coverage` run the command
+```
+coverage run -m pytest ./tests/*.py
+```
+
 ## Authors
 
 - Brandon Chen: [Github](https://github.com/b-chen00)
 - Adam Sidibe: [Github](https://github.com/sidibee)
 - Alexander Chen: [Github](https://github.com/TheAlexanderChen)
-- Wuji Cao: [Github](https://github.com/cwj2099)
+- Wuji Cao: [Github](https://github.com/cwj2099 )
 - John Kolibachuk: [Github](https://github.com/jkolib)
 - Seok Tae Kim: [Github](https://github.com/seoktaekim)
