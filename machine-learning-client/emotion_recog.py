@@ -113,10 +113,25 @@ def main():
         else:
             print('Username cannot be found!')
 
-    # db.collection_name.find_one({'username': user, 'password': passwd})
-    # model.cap_picture()
+    imgPath = None
+    while(True):
+        inp = input('Use camera for picture upload? y/n: ')
+
+        if inp.lower() == 'y':
+            imgPath = input('Enter filepath of picture: ')
+            break
+        elif inp.lower() == 'n':
+            break
+        else:
+            print('Invalid input')
+    
     print('Working...')
-    mood = model.classify()
+    mood = ''
+    if imgPath is None:
+        mood = model.classify()
+    else:
+        pic = cv2.imread(imgPath)
+        mood = model.classify(pic)
     database.mood.insert_one({
         'mood': mood,
         'time': datetime.datetime.now(),
