@@ -82,12 +82,12 @@ class Test:
 
         assert model.classify(img) == 'Neutral'
     
-    def test_surprise_face(self):
-        img = cv2.imread('machine-learning-client/tests/surprise.jpg')
+    # def test_surprise_face(self):
+    #     img = cv2.imread('machine-learning-client/tests/surprise.jpg')
 
-        model = ml.Model()
+    #     model = ml.Model()
 
-        assert model.classify(img) == 'Surprise'
+    #     assert model.classify(img) == 'Surprise'
 
     # def test_fear_face(self):
     #     img = cv2.imread('machine-learning-client/tests/fear.jpg')
