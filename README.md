@@ -22,6 +22,13 @@ This web application translates a person's facial expression into words. The use
 5. provide the username you used to register on the webapp and make sure your face is visible to your device's camera
 6. Return to [localhost](http://127.0.0.1:5000/) and login using your account
 
+## Run the Project Without Containers
+1. Move to the `web-app` folder using `cd` command
+2. Run using the command
+```
+flask run
+```
+
 ## Run Tests
 
 - The app consist of two separate test groups (web-app and the machine-learning-client)
@@ -30,11 +37,12 @@ This web application translates a person's facial expression into words. The use
 ```(python)
 python -m pytest web-app/tests
 python -m pytest machine-learning-client/tests
+
 ```
 
 ## Authors
 
-- Brandon Chen: [Github]()
+- Brandon Chen: [Github](https://github.com/b-chen00)
 - Adam Sidibe: [Github]()
 - Alexander Chen: [Github]()
 - Wuji Cao: [Github]()
