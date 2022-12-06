@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/styles.css">
+    </head>
+    <body>
+        <div class="row">
+            <a href="{{url_for('home')}}" class="mt-3 ml-5">
+                <input type="submit" id="backButton" name="back" value="Back" class="btn btn-primary"/>
+            </a>
+            <a href="{{url_for('logout')}}" class="mt-3 ml-3">
+                <input type="submit" id="logoutButton" name="logout" value="Log Out" class="btn btn-primary"/>
+            </a>
+        </div>
+        <div class="h-75 d-flex align-items-center justify-content-center">
+            <div class="card card-container col-md-4 mx-auto" style="border-radius: 2em; text-align: center; box-shadow: 0 5px 10px rgba(0,0,0,.2); background-color: #c3dbc5">
+                <center>
+                    <h3 class="banner mt-3">
+                        Today I am feeling {{mood}}.
+                    </h3>
+                    <img src={{img}}>
+                    <div class="mb-3">
+                        {{joke}}
+                    </div>
+                </center>
+            </div>
+        </div>
+    </body>
+</html>
