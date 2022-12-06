@@ -7,7 +7,7 @@
 
 ## Introduction
 
-This web application translates a person's facial expression into words. The user would be able to view their emotion history and receive a random text depending on their latest emotion. We serve to support and journal your emotions!
+This web application translates a person's facial expression into words. The user would be able to view their emotion history and receive a random poem, advice, or joke depending on their latest emotion. History can be viewed on a weekly basis with the most frequent mood representing the whole week. We serve to support and journal your emotions!
 
 ## SetUp
 1. Our machine-learning-client requires camera access. `Check to see if your computer's camera is fully functional.`
